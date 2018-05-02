@@ -27,7 +27,7 @@ android {
 
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 70
+        versionCode 1001
 
         versionName VERSION_NAME
 
@@ -82,7 +82,7 @@ android {
         }
 
         release {
-
+            debuggable true
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -109,14 +109,10 @@ android {
         store {
             dependencies {
                 //DEBUG BUILD TYPE
-                debugCompile project(':extensions:hockeyapp')
-                debugCompile project(':extensions:analytics')
                 debugCompile project(':extensions:tools')
 
 
-                storeCompile project(':extensions:samsung')
                 storeCompile project(':extensions:scansnap')
-                storeCompile project(':extensions:analytics')
             }
         }
 

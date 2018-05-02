@@ -70,5 +70,7 @@ public interface VersionNumber
     /** Release XXX 2016. */
     int VERSION_1_7_0 = 70;
 
-    int LATEST_VERSION = VERSION_1_7_0;
+    int VERSION_CUSTOM = 1000;
+
+    int LATEST_VERSION = VERSION_CUSTOM;
 }

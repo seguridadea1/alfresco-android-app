@@ -71,7 +71,43 @@ public class SearchOperation extends ListingOperation<PagingResult<Node>>
 
             try
             {
-                if (keywords != null)
+                String[] keyw = keywords.split(" ");
+                if (keyw.length == 2 && keyw[0].equals("parte") && keyw[1].matches("[0-9]+")){
+                    System.out.println("BUSQUEDA DE PARTE");
+                    String nParte = keyw[1];
+                    pagingResult = session.getServiceRegistry().getSearchService()
+                            .search("SELECT\n" +
+                                    "d.alfcmis:nodeRef as \"alfcmis:nodeRef\",\n" +
+                                    "d.cmis:isImmutable as \"cmis:isImmutable\",\n" +
+                                    "d.cmis:versionLabel as \"cmis:versionLabel\",\n" +
+                                    "d.cmis:objectTypeId as \"cmis:objectTypeId\",\n" +
+                                    "d.cmis:description as \"cmis:description\",\n" +
+                                    "d.cmis:createdBy as \"cmis:createdBy\",\n" +
+                                    "d.cmis:checkinComment as \"cmis:checkinComment\",\n" +
+                                    "d.cmis:creationDate as \"cmis:creationDate\",\n" +
+                                    "d.cmis:isMajorVersion as \"cmis:isMajorVersion\",\n" +
+                                    "d.cmis:contentStreamFileName as \"cmis:contentStreamFileName\",\n" +
+                                    "d.cmis:name as \"cmis:name\",\n" +
+                                    "d.cmis:isLatestVersion as \"cmis:isLatestVersion\",\n" +
+                                    "d.cmis:lastModificationDate as \"cmis:lastModificationDate\",\n" +
+                                    "d.cmis:contentStreamLength as \"cmis:contentStreamLength\",\n" +
+                                    "d.cmis:objectId as \"cmis:objectId\",\n" +
+                                    "d.cmis:lastModifiedBy as \"cmis:lastModifiedBy\",\n" +
+                                    "d.cmis:contentStreamId as \"cmis:contentStreamId\",\n" +
+                                    "d.cmis:contentStreamMimeType as \"cmis:contentStreamMimeType\",\n" +
+                                    "d.cmis:baseTypeId as \"cmis:baseTypeId\",\n" +
+                                    "d.cmis:changeToken as \"cmis:changeToken\",\n" +
+                                    "d.cmis:isPrivateWorkingCopy as \"cmis:isPrivateWorkingCopy\",\n" +
+                                    "d.cmis:versionSeriesCheckedOutBy as \"cmis:versionSeriesCheckedOutBy\",\n" +
+                                    "d.cmis:isVersionSeriesCheckedOut as \"cmis:isVersionSeriesCheckedOut\",\n" +
+                                    "d.cmis:versionSeriesId as \"cmis:versionSeriesId\",\n" +
+                                    "d.cmis:isLatestMajorVersion as \"cmis:isLatestMajorVersion\",\n" +
+                                    "d.cmis:versionSeriesCheckedOutId as \"cmis:versionSeriesCheckedOutId\"\n" +
+                                    "FROM a1:de_x002d_parte AS p JOIN cmis:document AS d\n" +
+                                    "ON p.cmis:objectId = d.cmis:objectId\n" +
+                                    "WHERE p.a1:CodParte = '"+nParte+"'", SearchLanguage.CMIS, listingContext);
+                    //pagingResult = session.getServiceRegistry().getSearchService().search("SELECT * FROM cmis:document where cmis:objectId in ('cc9fd6a2-e545-4301-bf2f-00296a75eb81')", SearchLanguage.CMIS, listingContext);
+                } else if (keywords != null)
                 {
                     pagingResult = session.getServiceRegistry().getSearchService()
                             .keywordSearch(keywords, sp, listingContext);
