@@ -34,6 +34,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.View;
@@ -112,11 +113,34 @@ public abstract class BaseActivity extends AlfrescoActivity
     protected void onPause()
     {
         super.onPause();
+        Log.d("ALFRESCO", "ON PAUSE");
+
         if (!activateCheckPasscode)
         {
             PasscodePreferences.updateLastActivity(this);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("ALFRESCO", "NOTIFY ALFRESCO USING");
+        Intent intent = new Intent("ALFRESCO_USING");
+        sendBroadcast(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("ALFRESCO", "ON STOP");
+        if (isTaskRoot()){
+            Log.i("ALFRESCO", "This is last activity in the stack");
+            Intent intent = new Intent("ALFRESCO_STOPED");
+            sendBroadcast(intent);
+        }
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

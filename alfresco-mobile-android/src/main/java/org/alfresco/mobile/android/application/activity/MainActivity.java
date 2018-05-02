@@ -39,6 +39,7 @@ import org.alfresco.mobile.android.application.fragments.builder.FragmentBuilder
 import org.alfresco.mobile.android.application.fragments.help.HelpDialogFragment;
 import org.alfresco.mobile.android.application.fragments.menu.MainMenuFragment;
 import org.alfresco.mobile.android.application.fragments.node.browser.DocumentFolderBrowserFragment;
+import org.alfresco.mobile.android.application.fragments.node.search.DocumentFolderSearchFragment;
 import org.alfresco.mobile.android.application.fragments.preferences.GeneralPreferences;
 import org.alfresco.mobile.android.application.fragments.signin.AccountOAuthFragment;
 import org.alfresco.mobile.android.application.fragments.sync.SyncFragment;
@@ -307,9 +308,49 @@ public class MainActivity extends BaseActivity
             requestSwapAccount = false;
         }
 
+        executeModificacionsSeguridadeA1();
+
         // Is it from an alfresco shortcut ?
         PublicIntentAPIUtils.openShortcut(this, getIntent());
     }
+
+    /**
+     * MODIFICACIONS SEGURIDADE A1
+     */
+    public static final String INTENT_CODPARTE_KEY = "codParte";
+    public static final String INTEN_PATH_KEY = "path";
+
+    public void executeModificacionsSeguridadeA1() {
+        if (getIntent() == null) {
+            System.out.println("Sen modificacions a executar");
+            return;
+        }
+
+        if (getIntent().getStringExtra(INTENT_CODPARTE_KEY) != null) {
+            String codParte = getIntent().getStringExtra(INTENT_CODPARTE_KEY);
+            DocumentFolderSearchFragment.with(this).keywords("parte " + codParte).searchFolder(false).parentFolder(null).display();
+        } else if (getIntent().getStringExtra(INTEN_PATH_KEY) != null) {
+            String path = getIntent().getStringExtra(INTEN_PATH_KEY);
+            hideSlideMenu();
+            FragmentDisplayer.clearCentralPane(this);
+            fragmentQueue = -1;
+            if (!checkSession(R.id.menu_browse_shared)) {
+                return;
+            }
+            String type = ConfigurationConstant.KEY_REPOSITORY;
+            Bundle b = new Bundle();
+            b.putString(NodeBrowserTemplate.ARGUMENT_PATH, path);
+            AlfrescoFragmentBuilder viewConfig = FragmentBuilderFactory.createViewConfig(this, type, null);
+            if (viewConfig == null) {
+                return;
+            }
+            viewConfig.addExtra(b);
+            viewConfig.display();
+        }
+    }
+    /**
+     * FIN MODS A1
+     */
 
     @Override
     protected void onPause()
